@@ -12,11 +12,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { createAvaliador } from "@/request/avaliador/create";
+import { deleteAvaliador } from "@/request/avaliador/delete";
 import { getAvaliadores } from "@/request/avaliador/find";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Upload } from "lucide-react";
-import { useState } from "react";
+import { Trash2, Upload } from "lucide-react";
+import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -44,20 +45,36 @@ export default function Avaliador() {
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [search, setSearch] = useState("");
+	const [isDelete, setDelete] = useState(false);
 
 	const file = watch("file");
-	const { data: avaliadores, isLoading } = useQuery({
+	const {
+		data: avaliadores,
+		isLoading,
+		refetch,
+	} = useQuery({
 		queryKey: ["create-avaliador"],
 		queryFn: getAvaliadores,
 	});
 
-	const { mutateAsync, isError, isSuccess } = useMutation({
+	const { mutateAsync: create } = useMutation({
 		mutationKey: ["create-avaliador"],
 		mutationFn: createAvaliador,
 	});
 
+	const { mutateAsync: del } = useMutation({
+		mutationKey: ["delete-avaliador"],
+		mutationFn: deleteAvaliador,
+	});
+
 	const handleClick = () => {
 		setIsOpen(!isOpen);
+	};
+
+	const handleDelete = async () => {
+		setDelete(!isDelete);
+		await del();
+		refetch();
 	};
 
 	const filterAvaliadores = avaliadores?.filter((item) => {
@@ -67,10 +84,10 @@ export default function Avaliador() {
 	});
 
 	const handleForm = async () => {
-		console.log(file);
-		await mutateAsync({
+		await create({
 			file: file[0],
 		});
+		refetch();
 	};
 	return (
 		<>
@@ -86,84 +103,101 @@ export default function Avaliador() {
 					<Button className="" size="sm" onClick={handleClick}>
 						<Upload />
 					</Button>
+					<Button
+						className="bg-red-500 hover:bg-red-300"
+						size="sm"
+						onClick={() => setDelete(!isDelete)}
+					>
+						<Trash2 />
+					</Button>
 				</div>
 				<div className="grid py-8 space-y-3 my-10">
-					{!isLoading ? (
-						<>
-							{filterAvaliadores !== undefined &&
-							filterAvaliadores.length > 0 ? (
-								<>
-									{filterAvaliadores.map((item) => (
-										<Card
-											className="px-3 py-4 w-[380px] space-y-1"
-											key={item.id}
-										>
-											<div className="flex space-x-1 items-center">
-												<span className="font-semibold">Nome:</span>
-												<p className="text-muted-foreground text-sm">
-													{item.nome}
-												</p>
-											</div>
-											<div className="flex space-x-1 items-center">
-												<span className="font-semibold">Email:</span>
-												<p className="text-muted-foreground text-sm">
-													{item.email}
-												</p>
-											</div>
-											<div className="flex space-x-1 items-center">
-												<span className="font-semibold">CPF:</span>
-												<p className="text-muted-foreground text-sm">
-													{item.cpf}
-												</p>
-											</div>
-											<div className="flex space-x-1 items-center">
-												<span className="font-semibold">Telefone:</span>
-												<p className="text-muted-foreground text-sm">
-													{item.telefone}
-												</p>
-											</div>
-										</Card>
-									))}
-								</>
-							) : (
-								<>
-									{avaliadores?.map((item) => (
-										<Card
-											className="px-3 py-4 w-[380px] space-y-1"
-											key={item.id}
-										>
-											<div className="flex space-x-1 items-center">
-												<span className="font-semibold">Nome:</span>
-												<p className="text-muted-foreground text-sm">
-													{item.nome}
-												</p>
-											</div>
-											<div className="flex space-x-1 items-center">
-												<span className="font-semibold">Email:</span>
-												<p className="text-muted-foreground text-sm">
-													{item.email}
-												</p>
-											</div>
-											<div className="flex space-x-1 items-center">
-												<span className="font-semibold">CPF:</span>
-												<p className="text-muted-foreground text-sm">
-													{item.cpf}
-												</p>
-											</div>
-											<div className="flex space-x-1 items-center">
-												<span className="font-semibold">Telefone:</span>
-												<p className="text-muted-foreground text-sm">
-													{item.telefone}
-												</p>
-											</div>
-										</Card>
-									))}
-								</>
-							)}
-						</>
-					) : (
-						<Spinner />
-					)}
+					<Suspense fallback={<Spinner />}>
+						{!isLoading ? (
+							<>
+								{filterAvaliadores !== undefined &&
+								filterAvaliadores.length > 0 ? (
+									<>
+										{filterAvaliadores.map((item) => (
+											<Card
+												className="px-3 py-4 w-[380px] space-y-1"
+												key={item.id}
+											>
+												<div className="flex space-x-1 items-center">
+													<span className="font-semibold">Nome:</span>
+													<p className="text-muted-foreground text-sm">
+														{item.nome}
+													</p>
+												</div>
+												<div className="flex space-x-1 items-center">
+													<span className="font-semibold">Email:</span>
+													<p className="text-muted-foreground text-sm">
+														{item.email}
+													</p>
+												</div>
+												<div className="flex space-x-1 items-center">
+													<span className="font-semibold">CPF:</span>
+													<p className="text-muted-foreground text-sm">
+														{item.cpf}
+													</p>
+												</div>
+												<div className="flex space-x-1 items-center">
+													<span className="font-semibold">Telefone:</span>
+													<p className="text-muted-foreground text-sm">
+														{item.telefone}
+													</p>
+												</div>
+											</Card>
+										))}
+									</>
+								) : (
+									<>
+										{avaliadores && avaliadores.length > 0 ? (
+											<>
+												{avaliadores?.map((item) => (
+													<Card
+														className="px-3 py-4 w-[380px] space-y-1"
+														key={item.id}
+													>
+														<div className="flex space-x-1 items-center">
+															<span className="font-semibold">Nome:</span>
+															<p className="text-muted-foreground text-sm">
+																{item.nome}
+															</p>
+														</div>
+														<div className="flex space-x-1 items-center">
+															<span className="font-semibold">Email:</span>
+															<p className="text-muted-foreground text-sm">
+																{item.email}
+															</p>
+														</div>
+														<div className="flex space-x-1 items-center">
+															<span className="font-semibold">CPF:</span>
+															<p className="text-muted-foreground text-sm">
+																{item.cpf}
+															</p>
+														</div>
+														<div className="flex space-x-1 items-center">
+															<span className="font-semibold">Telefone:</span>
+															<p className="text-muted-foreground text-sm">
+																{item.telefone}
+															</p>
+														</div>
+													</Card>
+												))}
+											</>
+										) : (
+											<p className="text-muted-foreground">
+												Nenhum avaliador encontrado
+											</p>
+										)}
+									</>
+								)}
+							</>
+						) : (
+							<Spinner />
+						)}
+					</Suspense>
 				</div>
 			</main>
 			<Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -178,7 +212,7 @@ export default function Avaliador() {
 					</DialogHeader>
 					<div className="grid gap-4 py-4">
 						<form
-							className=" py-10 space-y-6 flex flex-col items-end"
+							className="space-y-6 flex flex-col items-end"
 							onSubmit={handleSubmit(handleForm)}
 						>
 							<Input
@@ -191,6 +225,33 @@ export default function Avaliador() {
 								Enviar
 							</Button>
 						</form>
+					</div>
+				</DialogContent>
+			</Dialog>
+			<Dialog open={isDelete} onOpenChange={setDelete}>
+				<DialogContent className="sm:max-w-[425px] w-11/12 rounded-lg">
+					<DialogHeader>
+						<DialogTitle>Remover avaliadores</DialogTitle>
+						<DialogDescription>
+							Você está prestes a remover todos os avaliadores desta lista, se
+							deseja continuar apenas clique no botão
+						</DialogDescription>
+					</DialogHeader>
+					<div className="grid grid-cols-2 gap-2 py-4">
+						<Button
+							variant="outline"
+							type="submit"
+							onClick={() => setDelete(!isDelete)}
+						>
+							Cancelar
+						</Button>
+						<Button
+							className="bg-red-500 hover:bg-red-300"
+							type="submit"
+							onClick={handleDelete}
+						>
+							Deletar
+						</Button>
 					</div>
 				</DialogContent>
 			</Dialog>
