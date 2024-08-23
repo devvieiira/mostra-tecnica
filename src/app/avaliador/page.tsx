@@ -16,7 +16,7 @@ import { deleteAvaliador } from "@/request/avaliador/delete";
 import { getAvaliadores } from "@/request/avaliador/find";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Trash2, Upload } from "lucide-react";
+import { LoaderCircle, Trash2, Upload } from "lucide-react";
 import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -57,7 +57,7 @@ export default function Avaliador() {
 		queryFn: getAvaliadores,
 	});
 
-	const { mutateAsync: create } = useMutation({
+	const { mutateAsync: create, isPending } = useMutation({
 		mutationKey: ["create-avaliador"],
 		mutationFn: createAvaliador,
 	});
@@ -68,7 +68,9 @@ export default function Avaliador() {
 	});
 
 	const handleClick = () => {
-		setIsOpen(!isOpen);
+		if (!isLoading) {
+			setIsOpen(!isOpen);
+		}
 	};
 
 	const handleDelete = async () => {
@@ -222,7 +224,11 @@ export default function Avaliador() {
 								{...register("file")}
 							/>
 							<Button type="submit" onClick={handleClick}>
-								Enviar
+								{isPending ? (
+									<LoaderCircle className="animate-spin" />
+								) : (
+									"Enviar"
+								)}
 							</Button>
 						</form>
 					</div>
