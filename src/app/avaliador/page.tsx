@@ -68,9 +68,9 @@ export default function Avaliador() {
 	});
 
 	const handleClick = () => {
-		if (!isLoading) {
-			setIsOpen(!isOpen);
-		}
+		setIsOpen(!isOpen);
+
+		refetch();
 	};
 
 	const handleDelete = async () => {

@@ -1,11 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import logo from "@/img/logo.svg";
 import { usePage } from "@/store/page";
 import { Home, Layers, Menu, NotebookText, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Separator } from "./ui/separator";
 import {
 	Sheet,
@@ -26,21 +27,32 @@ export default function NavBar() {
 		actions: { insert },
 	} = usePage();
 
-	const router = useRouter();
+	const pathname = usePathname();
 
 	const handleClick = () => {
 		setIsOpen(!isOpen);
 	};
 
-	const handlePage = (page: pages) => {
-		setPage(page);
-
-		if (page === "home") {
-			router.push("/");
-		} else {
-			router.push(`/${page}`);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		switch (pathname) {
+			case "/":
+				insert("home");
+				break;
+			case "/avaliador":
+				insert("avaliador");
+				break;
+			case "/trabalho":
+				insert("trabalho");
+				break;
+			case "/usuario":
+				insert("usuario");
+				break;
+			default:
+				insert("home");
 		}
-	};
+	}, [pathname]);
+
 	return (
 		<>
 			<nav className="min-h-20 w-full px-4 bg-primary-figma flex items-center justify-between istok-web-regular">
