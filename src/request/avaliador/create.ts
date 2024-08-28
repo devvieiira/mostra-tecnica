@@ -9,5 +9,6 @@ export async function createAvaliador({ file }: avaliadorProps) {
 	const formdata = new FormData();
 	formdata.append("file", file);
 
-	await api.post("/avaliador/import", formdata, axiosConfig);
+	const response = await api.post("/avaliador/import", formdata, axiosConfig);
+	return { response };
 }

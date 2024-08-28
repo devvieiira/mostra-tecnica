@@ -9,5 +9,6 @@ export async function createTrabalho({ file }: trabalhoProps) {
 	const formdata = new FormData();
 	formdata.append("file", file);
 
-	await api.post("/trabalho/import", formdata, axiosConfig);
+	const response = await api.post("/trabalho/import", formdata, axiosConfig);
+	return { response };
 }

@@ -11,9 +11,6 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { createAvaliador } from "@/request/avaliador/create";
-import { deleteAvaliador } from "@/request/avaliador/delete";
-import { getAvaliadores } from "@/request/avaliador/find";
 import { createTrabalho } from "@/request/trabalho/create";
 import { deleteTrabalhos } from "@/request/trabalho/delete";
 import { getTrabalhos } from "@/request/trabalho/find";
@@ -22,6 +19,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { LoaderCircle, Trash2, Upload } from "lucide-react";
 import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const schema = z.object({
@@ -78,8 +76,22 @@ export default function Trabalho() {
 
 	const handleDelete = async () => {
 		setDelete(!isDelete);
-		await del();
-		refetch();
+		const inviteForm = async () => {
+			const { response } = await del();
+			if (response) {
+				return true;
+			}
+		};
+		toast.promise(inviteForm(), {
+			loading: "Carregando...",
+			duration: 2000,
+
+			success: () => {
+				refetch();
+				return "Trabalho deletado com sucesso!";
+			},
+			error: "Algo deu errado!",
+		});
 	};
 
 	const filteredTrabalho = trabalhos?.filter((item) => {
@@ -89,10 +101,24 @@ export default function Trabalho() {
 	});
 
 	const handleForm = async () => {
-		await create({
-			file: file[0],
+		const inviteForm = async () => {
+			const { response } = await create({
+				file: file[0],
+			});
+			if (response) {
+				return true;
+			}
+		};
+		toast.promise(inviteForm(), {
+			loading: "Carregando...",
+			duration: 2000,
+
+			success: () => {
+				refetch();
+				return "Trabalho criado com sucesso!";
+			},
+			error: "Algo deu errado!",
 		});
-		refetch();
 	};
 	return (
 		<>
@@ -274,7 +300,7 @@ export default function Trabalho() {
 			<Dialog open={isDelete} onOpenChange={setDelete}>
 				<DialogContent className="sm:max-w-[425px] w-11/12 rounded-lg">
 					<DialogHeader>
-						<DialogTitle>Remover avaliadores</DialogTitle>
+						<DialogTitle>Remover trabalhos</DialogTitle>
 						<DialogDescription>
 							Você está prestes a remover todos os trabalhos desta lista, se
 							deseja continuar apenas clique no botão

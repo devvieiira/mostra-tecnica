@@ -19,6 +19,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { LoaderCircle, Trash2, Upload } from "lucide-react";
 import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const schema = z.object({
@@ -75,8 +76,22 @@ export default function Avaliador() {
 
 	const handleDelete = async () => {
 		setDelete(!isDelete);
-		await del();
-		refetch();
+		const inviteForm = async () => {
+			const { response } = await del();
+			if (response) {
+				return true;
+			}
+		};
+		toast.promise(inviteForm(), {
+			loading: "Carregando...",
+			duration: 2000,
+
+			success: () => {
+				refetch();
+				return "Avaliador deletado com sucesso!";
+			},
+			error: "Algo deu errado!",
+		});
 	};
 
 	const filterAvaliadores = avaliadores?.filter((item) => {
@@ -86,10 +101,24 @@ export default function Avaliador() {
 	});
 
 	const handleForm = async () => {
-		await create({
-			file: file[0],
+		const inviteForm = async () => {
+			const { response } = await create({
+				file: file[0],
+			});
+			if (response) {
+				return true;
+			}
+		};
+		toast.promise(inviteForm(), {
+			loading: "Carregando...",
+			duration: 2000,
+
+			success: () => {
+				refetch();
+				return "Avaliador criado com sucesso!";
+			},
+			error: "Algo deu errado!",
 		});
-		refetch();
 	};
 	return (
 		<>
