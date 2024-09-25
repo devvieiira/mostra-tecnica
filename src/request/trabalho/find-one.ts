@@ -13,7 +13,8 @@ type trabalhoProps = {
 	area: string;
 };
 
-export async function getTrabalhos(): Promise<trabalhoProps[]> {
-	const data = (await api.get("/trabalhos")).data.data;
+export async function getOneWork(id: string): Promise<trabalhoProps[]> {
+	const data = (await api.get(`/trabalhos/${id}`)).data.data;
+	// console.log(data);
 	return data;
 }

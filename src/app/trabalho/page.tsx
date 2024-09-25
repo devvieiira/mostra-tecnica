@@ -142,7 +142,7 @@ export default function Trabalho() {
 						<Trash2 />
 					</Button>
 				</div>
-				<div className="grid py-8 space-y-3 my-10">
+				<div className="grid py-8 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 my-10">
 					<Suspense fallback={<Spinner />}>
 						{!isLoading ? (
 							<>
@@ -151,7 +151,7 @@ export default function Trabalho() {
 									<>
 										{filteredTrabalho.map((item) => (
 											<Card
-												className="px-3 py-4 w-[400px] space-y-2"
+												className="px-3 py-4 w-[400px] space-y-2 m-2"
 												key={item.id}
 											>
 												<div className="flex space-x-1 items-center">
@@ -192,6 +192,14 @@ export default function Trabalho() {
 														{item.autor.email}
 													</p>
 												</div>
+												{item.area !== "" && (
+													<div className="flex space-x-1 items-center">
+														<span className="font-semibold">Área:</span>
+														<p className="text-muted-foreground text-sm">
+															{item.area}
+														</p>
+													</div>
+												)}
 											</Card>
 										))}
 									</>
@@ -201,7 +209,7 @@ export default function Trabalho() {
 											<>
 												{trabalhos?.map((item) => (
 													<Card
-														className="px-3 py-4 w-[400px] space-y-2"
+														className="px-3 py-4 w-[400px] space-y-2 m-2"
 														key={item.id}
 													>
 														<div className="flex space-x-1 items-center">
@@ -248,11 +256,19 @@ export default function Trabalho() {
 																{item.autor.email}
 															</p>
 														</div>
+														{item.area !== "" && (
+															<div className="flex space-x-1 items-center">
+																<span className="font-semibold">Área:</span>
+																<p className="text-muted-foreground text-sm">
+																	{item.area}
+																</p>
+															</div>
+														)}
 													</Card>
 												))}
 											</>
 										) : (
-											<p className="text-muted-foreground">
+											<p className="text-muted-foreground md:col-span-2 xl:col-span-3">
 												Nenhum avaliador encontrado
 											</p>
 										)}

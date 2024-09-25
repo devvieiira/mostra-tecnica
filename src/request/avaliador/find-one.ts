@@ -7,11 +7,12 @@ type avaliadorProps = {
 	cpf: string;
 	telefone: string;
 	interesse: string;
-	disponibilidade: string;
+	disponibilidade?: string;
 	trabalhos?: string;
 };
 
-export async function getAvaliadores(): Promise<avaliadorProps[]> {
-	const data = (await api.get("/avaliadores")).data.data;
+export async function getOneAvaliable(id: string): Promise<avaliadorProps> {
+	const data = (await api.get(`/avaliador/${id}`)).data.data;
+	// console.log(data);
 	return data;
 }
