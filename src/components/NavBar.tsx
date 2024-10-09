@@ -3,7 +3,14 @@
 import logo from "@/img/logo.svg";
 import { AuthStore } from "@/store/auth";
 import { usePage } from "@/store/page";
-import { Home, Layers, Menu, NotebookText, User } from "lucide-react";
+import {
+	Home,
+	Layers,
+	Menu,
+	Newspaper,
+	NotebookText,
+	User,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -192,13 +199,14 @@ export default function NavBar({ value }: navBarProps) {
 										Trabalhos
 									</h2>
 								</Link>
+
 								<Link
-									href="/admin/usuario"
+									href="/admin/resultados"
 									className={`flex px-2 space-x-2 items-center ${
 										pages === "usuario" && "bg-primary-figma/20"
 									} p-2 rounded-md`}
 								>
-									<User
+									<Newspaper
 										className={`h-7 w-7 ${
 											pages === "usuario"
 												? "text-primary-figma"
@@ -220,7 +228,7 @@ export default function NavBar({ value }: navBarProps) {
 												: "text-muted-foreground"
 										} font-medium`}
 									>
-										Usuários
+										Resultados
 									</h2>
 								</Link>
 							</>

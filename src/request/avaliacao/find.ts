@@ -7,6 +7,8 @@ type avalicoes = {
 	nota: number;
 	avaliador: string;
 	avaliadorEmail: string;
+	areaTrabalho: string;
+	autor: string;
 };
 
 export async function getAvaliacoes(): Promise<avalicoes[]> {
