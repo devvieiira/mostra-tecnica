@@ -11,12 +11,23 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { createTrabalho } from "@/request/trabalho/create";
-import { deleteTrabalhos } from "@/request/trabalho/delete";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { createAvaliador } from "@/request/avaliador/create";
+import { deleteAvaliador } from "@/request/avaliador/delete";
+import { getAvaliadores } from "@/request/avaliador/find";
 import { getTrabalhos } from "@/request/trabalho/find";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { LoaderCircle, Trash2, Upload } from "lucide-react";
+import { LoaderCircle, Plus, Trash2, Upload } from "lucide-react";
+import Link from "next/link";
 import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -28,7 +39,7 @@ const schema = z.object({
 
 type formProps = z.infer<typeof schema>;
 
-export default function Trabalho() {
+export default function Avaliador() {
 	const {
 		handleSubmit,
 		register,
@@ -47,29 +58,43 @@ export default function Trabalho() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [search, setSearch] = useState("");
 	const [isDelete, setDelete] = useState(false);
+	const [isEdit, setEdit] = useState(false);
+
+	const [selectValue, setSelectValue] = useState("");
 
 	const file = watch("file");
 	const {
-		data: trabalhos,
+		data: avaliadores,
 		isLoading,
 		refetch,
 	} = useQuery({
+		queryKey: ["get-avaliador"],
+		queryFn: getAvaliadores,
+	});
+
+	const { data: trabalhos } = useQuery({
 		queryKey: ["get-trabalhos"],
 		queryFn: getTrabalhos,
 	});
 
 	const { mutateAsync: create, isPending } = useMutation({
-		mutationKey: ["create-trabalho"],
-		mutationFn: createTrabalho,
+		mutationKey: ["create-avaliador"],
+		mutationFn: createAvaliador,
 	});
 
 	const { mutateAsync: del } = useMutation({
-		mutationKey: ["delete-trabalhos"],
-		mutationFn: deleteTrabalhos,
+		mutationKey: ["delete-avaliador"],
+		mutationFn: deleteAvaliador,
 	});
 
 	const handleClick = () => {
 		setIsOpen(!isOpen);
+
+		refetch();
+	};
+
+	const handleEdit = () => {
+		setEdit(!isEdit);
 
 		refetch();
 	};
@@ -88,15 +113,15 @@ export default function Trabalho() {
 
 			success: () => {
 				refetch();
-				return "Trabalho deletado com sucesso!";
+				return "Avaliador deletado com sucesso!";
 			},
 			error: "Algo deu errado!",
 		});
 	};
 
-	const filteredTrabalho = trabalhos?.filter((item) => {
+	const filterAvaliadores = avaliadores?.filter((item) => {
 		if (search !== "") {
-			return item.titulo_trabalho.toLowerCase().includes(search.toLowerCase());
+			return item.nome.toLowerCase().includes(search.toLowerCase());
 		}
 	});
 
@@ -115,15 +140,17 @@ export default function Trabalho() {
 
 			success: () => {
 				refetch();
-				return "Trabalho criado com sucesso!";
+				return "Avaliador criado com sucesso!";
 			},
 			error: "Algo deu errado!",
 		});
 	};
+
+	console.log(avaliadores);
 	return (
 		<>
 			<main className="bg-white flex flex-col items-center min-h-screen">
-				<NavBar />
+				<NavBar value="admin" />
 
 				<div className="flex mt-6 space-x-1 items-center">
 					<Input
@@ -142,128 +169,100 @@ export default function Trabalho() {
 						<Trash2 />
 					</Button>
 				</div>
-				<div className="grid py-8 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 my-10">
+				<div className="grid md:grid-cols-2 xl:grid-cols-3 py-8 my-10">
 					<Suspense fallback={<Spinner />}>
 						{!isLoading ? (
 							<>
-								{filteredTrabalho !== undefined &&
-								filteredTrabalho.length > 0 ? (
+								{filterAvaliadores !== undefined &&
+								filterAvaliadores.length > 0 ? (
 									<>
-										{filteredTrabalho.map((item) => (
+										{filterAvaliadores.map((item) => (
 											<Card
-												className="px-3 py-4 w-[400px] space-y-2 m-2"
+												className="px-3 py-4 w-[380px] space-y-1 m-2"
 												key={item.id}
 											>
+												<div className="flex space-x-1 px-2 justify-end items-center">
+													<Link href={`/avaliador/${item.id}/info`}>
+														<Plus />
+													</Link>
+												</div>
 												<div className="flex space-x-1 items-center">
-													<span className="font-semibold">Título:</span>
+													<span className="font-semibold">Nome:</span>
 													<p className="text-muted-foreground text-sm">
-														{item.titulo_trabalho}
+														{item.nome}
 													</p>
 												</div>
 												<div className="flex space-x-1 items-center">
-													<span className="font-semibold">Instituição:</span>
+													<span className="font-semibold">Email:</span>
 													<p className="text-muted-foreground text-sm">
-														{item.instituicao}
+														{item.email}
 													</p>
 												</div>
 												<div className="flex space-x-1 items-center">
-													<span className="font-semibold">
-														Nível de ensino:
-													</span>
+													<span className="font-semibold">CPF:</span>
 													<p className="text-muted-foreground text-sm">
-														{item.nivel_ensino}
+														{item.cpf}
 													</p>
 												</div>
 												<div className="flex space-x-1 items-center">
-													<span className="font-semibold">Autor:</span>
+													<span className="font-semibold">Telefone:</span>
 													<p className="text-muted-foreground text-sm">
-														{item.autor.nome}
+														{item.telefone}
 													</p>
 												</div>
 												<div className="flex space-x-1 items-center">
-													<span className="font-semibold">CPF do autor:</span>
+													<span className="font-semibold">Área:</span>
 													<p className="text-muted-foreground text-sm">
-														{item.autor.cpf}
+														{item.interesse}
 													</p>
 												</div>
-												<div className="flex space-x-1 items-center">
-													<span className="font-semibold">Email do autor:</span>
-													<p className="text-muted-foreground text-sm">
-														{item.autor.email}
-													</p>
-												</div>
-												{item.area !== "" && (
-													<div className="flex space-x-1 items-center">
-														<span className="font-semibold">Área:</span>
-														<p className="text-muted-foreground text-sm">
-															{item.area}
-														</p>
-													</div>
-												)}
 											</Card>
 										))}
 									</>
 								) : (
 									<>
-										{trabalhos && trabalhos.length > 0 ? (
+										{avaliadores && avaliadores.length > 0 ? (
 											<>
-												{trabalhos?.map((item) => (
+												{avaliadores?.map((item) => (
 													<Card
-														className="px-3 py-4 w-[400px] space-y-2 m-2"
+														className="px-3 py-4 w-[380px] space-y-1 m-2"
 														key={item.id}
 													>
+														<div className="flex space-x-1 px-2 justify-end items-center">
+															<Link href={`/admin/avaliador/${item.id}/info`}>
+																<Plus />
+															</Link>
+														</div>
 														<div className="flex space-x-1 items-center">
-															<span className="font-semibold">Título:</span>
+															<span className="font-semibold">Nome:</span>
 															<p className="text-muted-foreground text-sm">
-																{item.titulo_trabalho}
+																{item.nome}
 															</p>
 														</div>
 														<div className="flex space-x-1 items-center">
-															<span className="font-semibold">
-																Instituição:
-															</span>
+															<span className="font-semibold">Email:</span>
 															<p className="text-muted-foreground text-sm">
-																{item.instituicao}
+																{item.email}
 															</p>
 														</div>
 														<div className="flex space-x-1 items-center">
-															<span className="font-semibold">
-																Nível de ensino:
-															</span>
+															<span className="font-semibold">CPF:</span>
 															<p className="text-muted-foreground text-sm">
-																{item.nivel_ensino}
+																{item.cpf}
 															</p>
 														</div>
 														<div className="flex space-x-1 items-center">
-															<span className="font-semibold">Autor:</span>
+															<span className="font-semibold">Telefone:</span>
 															<p className="text-muted-foreground text-sm">
-																{item.autor.nome}
+																{item.telefone}
 															</p>
 														</div>
 														<div className="flex space-x-1 items-center">
-															<span className="font-semibold">
-																CPF do autor:
-															</span>
+															<span className="font-semibold">Área:</span>
 															<p className="text-muted-foreground text-sm">
-																{item.autor.cpf}
+																{item.interesse}
 															</p>
 														</div>
-														<div className="flex space-x-1 items-center">
-															<span className="font-semibold">
-																Email do autor:
-															</span>
-															<p className="text-muted-foreground text-sm">
-																{item.autor.email}
-															</p>
-														</div>
-														{item.area !== "" && (
-															<div className="flex space-x-1 items-center">
-																<span className="font-semibold">Área:</span>
-																<p className="text-muted-foreground text-sm">
-																	{item.area}
-																</p>
-															</div>
-														)}
 													</Card>
 												))}
 											</>
@@ -281,10 +280,11 @@ export default function Trabalho() {
 					</Suspense>
 				</div>
 			</main>
+			{/* Adiciona avaliadores */}
 			<Dialog open={isOpen} onOpenChange={setIsOpen}>
 				<DialogContent className="sm:max-w-[425px] w-11/12 rounded-lg">
 					<DialogHeader>
-						<DialogTitle>Adicionar trabalhos</DialogTitle>
+						<DialogTitle>Adicionar avaliadores</DialogTitle>
 						<DialogDescription>
 							Como funciona? Clique no botão e selecione sua planilha do excel{" "}
 							{"(arquivo no formato .xlsx)"}. Após isto basta clicar no botão e
@@ -313,12 +313,13 @@ export default function Trabalho() {
 					</div>
 				</DialogContent>
 			</Dialog>
+			{/* Remove Avaliadores */}
 			<Dialog open={isDelete} onOpenChange={setDelete}>
 				<DialogContent className="sm:max-w-[425px] w-11/12 rounded-lg">
 					<DialogHeader>
-						<DialogTitle>Remover trabalhos</DialogTitle>
+						<DialogTitle>Remover avaliadores</DialogTitle>
 						<DialogDescription>
-							Você está prestes a remover todos os trabalhos desta lista, se
+							Você está prestes a remover todos os avaliadores desta lista, se
 							deseja continuar apenas clique no botão
 						</DialogDescription>
 					</DialogHeader>
@@ -337,6 +338,55 @@ export default function Trabalho() {
 						>
 							Deletar
 						</Button>
+					</div>
+				</DialogContent>
+			</Dialog>
+			{/* Adiciona trabalhos */}
+			<Dialog open={isEdit} onOpenChange={setEdit}>
+				<DialogContent className="sm:max-w-[425px] w-11/12 rounded-lg">
+					<DialogHeader>
+						<DialogTitle>Atribuição de Trabalhos</DialogTitle>
+						<DialogDescription>
+							Aqui você pode atribuir trabalhos para os avaliadores futuramente
+							adicionaram uma nota ao mesmo.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="grid gap-4 py-4">
+						<form
+							className="space-y-6 flex flex-col items-end"
+							onSubmit={handleSubmit(handleForm)}
+						>
+							<Select
+								onValueChange={(value) => {
+									setSelectValue(value);
+								}}
+								value={selectValue}
+							>
+								<SelectTrigger className="" id="select1">
+									<SelectValue
+										className=""
+										placeholder="Selecione uma área..."
+									/>
+								</SelectTrigger>
+								<SelectContent className="">
+									<SelectGroup className="">
+										<SelectLabel className="2xl:text-xl">Trabalhos</SelectLabel>
+										{trabalhos?.map((item) => (
+											<SelectItem className="" key={item.id} value={item.id}>
+												{item.titulo_trabalho}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+							<Button type="submit" onClick={handleEdit}>
+								{isPending ? (
+									<LoaderCircle className="animate-spin" />
+								) : (
+									"Enviar"
+								)}
+							</Button>
+						</form>
 					</div>
 				</DialogContent>
 			</Dialog>

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import logo from "@/img/logo.svg";
+import { AuthStore } from "@/store/auth";
 import { usePage } from "@/store/page";
 import { Home, Layers, Menu, NotebookText, User } from "lucide-react";
 import Image from "next/image";
@@ -18,59 +19,79 @@ import {
 
 type pages = "home" | "avaliador" | "trabalho" | "usuario";
 
-export default function NavBar() {
+type navBarProps = {
+	value: string;
+};
+
+export default function NavBar({ value }: navBarProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [page, setPage] = useState<pages>("home");
+
+	const {
+		actions: { logout },
+		state: { user },
+	} = AuthStore();
 
 	const {
 		state: { pages },
 		actions: { insert },
 	} = usePage();
 
-	const pathname = usePathname();
-
 	const handleClick = () => {
 		setIsOpen(!isOpen);
+	};
+	const pathname = usePathname();
+
+	const getPathType = (pathname: string) => {
+		if (pathname.startsWith("/admin/avaliador/")) return "avaliador";
+		if (pathname.startsWith("/admin/trabalho/")) return "trabalho";
+		if (pathname.startsWith("/admin/usuario/")) return "usuario";
+		if (pathname === "/") return "home";
+		return "home";
 	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		switch (pathname) {
-			case "/":
-				insert("home");
-				break;
-			case "/avaliador":
-				insert("avaliador");
-				break;
-			case "/trabalho":
-				insert("trabalho");
-				break;
-			case "/usuario":
-				insert("usuario");
-				break;
-			default:
-				insert("home");
-		}
+		console.log(getPathType(pathname));
+
+		insert(getPathType(pathname));
 	}, [pathname]);
 
 	return (
 		<>
-			<nav className="min-h-20 w-full px-4 bg-primary-figma flex items-center justify-between istok-web-regular">
+			<nav
+				className={
+					value === "noHamburguer"
+						? "min-h-20 w-full px-4 bg-primary-figma flex items-center justify-start istok-web-regular"
+						: "min-h-20 w-full px-4 bg-primary-figma flex items-center justify-between istok-web-regular"
+				}
+			>
 				<Image src={logo} alt="Logo" />
-				<Link
-					onClick={handleClick}
-					href="#"
-					className="hover:bg-white/20 p-1 rounded-md cursor-pointer"
-				>
-					<Menu className="text-white h-8 w-8" />
-				</Link>
+				{value !== "noHamburguer" && (
+					<Link
+						onClick={handleClick}
+						href="#"
+						className="hover:bg-white/20 p-1 rounded-md cursor-pointer"
+					>
+						<Menu className="text-white h-8 w-8" />
+					</Link>
+				)}
 			</nav>
 			<Sheet open={isOpen} onOpenChange={setIsOpen}>
 				<SheetContent>
 					<SheetHeader>
 						<SheetTitle>Menu</SheetTitle>
-						<SheetDescription>
+						<SheetDescription className="flex flex-col">
 							Mostra Técnica IFRS - Campus Feliz
+							<div className="py-2 flex justify-start">
+								<Link
+									href="/auth/logout"
+									className="text-red-400 font-semibold text-sm hover:border-b hover:border-red-400"
+									onClick={logout}
+								>
+									Sair
+								</Link>
+							</div>
 						</SheetDescription>
 					</SheetHeader>
 					<div className="grid py-10">
@@ -106,100 +127,104 @@ export default function NavBar() {
 								Página Inicial
 							</h2>
 						</Link>
-						<Link
-							href="/avaliador"
-							onClick={() => insert("avaliador")}
-							className={`flex px-2 space-x-2 items-center ${
-								pages === "avaliador" && "bg-primary-figma/20"
-							} p-2 rounded-md`}
-						>
-							<NotebookText
-								className={`h-7 w-7 ${
-									pages === "avaliador"
-										? "text-primary-figma"
-										: "text-muted-foreground"
-								}`}
-							/>
-							<Separator
-								orientation="vertical"
-								className={`${
-									pages === "avaliador"
-										? "bg-primary-figma/50"
-										: "bg-muted-foreground"
-								} w-[2px] h-3/4`}
-							/>
-							<h2
-								className={`${
-									pages === "avaliador"
-										? "text-primary-figma"
-										: "text-muted-foreground"
-								} font-medium`}
-							>
-								Avaliadores
-							</h2>
-						</Link>
-						<Link
-							href="/trabalho"
-							className={`flex px-2 space-x-2 items-center ${
-								pages === "trabalho" && "bg-primary-figma/20"
-							} p-2 rounded-md`}
-						>
-							<Layers
-								className={`h-7 w-7 ${
-									pages === "trabalho"
-										? "text-primary-figma"
-										: "text-muted-foreground"
-								}`}
-							/>
-							<Separator
-								orientation="vertical"
-								className={`${
-									pages === "trabalho"
-										? "bg-primary-figma/50"
-										: "bg-muted-foreground"
-								} w-[2px] h-3/4`}
-							/>
-							<h2
-								className={`${
-									pages === "trabalho"
-										? "text-primary-figma"
-										: "text-muted-foreground"
-								} font-medium`}
-							>
-								Trabalhos
-							</h2>
-						</Link>
-						<Link
-							href="/usuario"
-							className={`flex px-2 space-x-2 items-center ${
-								pages === "usuario" && "bg-primary-figma/20"
-							} p-2 rounded-md`}
-						>
-							<User
-								className={`h-7 w-7 ${
-									pages === "usuario"
-										? "text-primary-figma"
-										: "text-muted-foreground"
-								}`}
-							/>
-							<Separator
-								orientation="vertical"
-								className={`${
-									pages === "usuario"
-										? "bg-primary-figma/50"
-										: "bg-muted-foreground"
-								} w-[2px] h-3/4`}
-							/>
-							<h2
-								className={`${
-									pages === "usuario"
-										? "text-primary-figma"
-										: "text-muted-foreground"
-								} font-medium`}
-							>
-								Usuários
-							</h2>
-						</Link>
+						{value !== "avaliador" && (
+							<>
+								<Link
+									href="/admin/avaliador"
+									onClick={() => insert("avaliador")}
+									className={`flex px-2 space-x-2 items-center ${
+										pages === "avaliador" && "bg-primary-figma/20"
+									} p-2 rounded-md`}
+								>
+									<NotebookText
+										className={`h-7 w-7 ${
+											pages === "avaliador"
+												? "text-primary-figma"
+												: "text-muted-foreground"
+										}`}
+									/>
+									<Separator
+										orientation="vertical"
+										className={`${
+											pages === "avaliador"
+												? "bg-primary-figma/50"
+												: "bg-muted-foreground"
+										} w-[2px] h-3/4`}
+									/>
+									<h2
+										className={`${
+											pages === "avaliador"
+												? "text-primary-figma"
+												: "text-muted-foreground"
+										} font-medium`}
+									>
+										Avaliadores
+									</h2>
+								</Link>
+								<Link
+									href="/admin/trabalho"
+									className={`flex px-2 space-x-2 items-center ${
+										pages === "trabalho" && "bg-primary-figma/20"
+									} p-2 rounded-md`}
+								>
+									<Layers
+										className={`h-7 w-7 ${
+											pages === "trabalho"
+												? "text-primary-figma"
+												: "text-muted-foreground"
+										}`}
+									/>
+									<Separator
+										orientation="vertical"
+										className={`${
+											pages === "trabalho"
+												? "bg-primary-figma/50"
+												: "bg-muted-foreground"
+										} w-[2px] h-3/4`}
+									/>
+									<h2
+										className={`${
+											pages === "trabalho"
+												? "text-primary-figma"
+												: "text-muted-foreground"
+										} font-medium`}
+									>
+										Trabalhos
+									</h2>
+								</Link>
+								<Link
+									href="/admin/usuario"
+									className={`flex px-2 space-x-2 items-center ${
+										pages === "usuario" && "bg-primary-figma/20"
+									} p-2 rounded-md`}
+								>
+									<User
+										className={`h-7 w-7 ${
+											pages === "usuario"
+												? "text-primary-figma"
+												: "text-muted-foreground"
+										}`}
+									/>
+									<Separator
+										orientation="vertical"
+										className={`${
+											pages === "usuario"
+												? "bg-primary-figma/50"
+												: "bg-muted-foreground"
+										} w-[2px] h-3/4`}
+									/>
+									<h2
+										className={`${
+											pages === "usuario"
+												? "text-primary-figma"
+												: "text-muted-foreground"
+										} font-medium`}
+									>
+										Usuários
+									</h2>
+								</Link>
+							</>
+						)}
 					</div>
 				</SheetContent>
 			</Sheet>

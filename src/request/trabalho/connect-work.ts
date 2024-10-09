@@ -1,13 +1,8 @@
 import { api } from "../axios";
 
-type connectProps = {
-	idTrabalho: string;
-	idAvaliador: string;
-};
-
-export async function connectWork({ idTrabalho, idAvaliador }: connectProps) {
+export async function connectWork(idAvaliador: string, idTrabalho: string) {
 	const response = await api.patch(
-		`/trabalho/avaliador/${idAvaliador}/${idTrabalho}`,
+		`/trabalho/avaliador/connect/${idAvaliador}/${idTrabalho}`,
 	);
 	return { response };
 }

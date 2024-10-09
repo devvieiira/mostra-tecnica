@@ -5,11 +5,13 @@ type trabalhoProps = {
 	instituicao: string;
 	titulo_trabalho: string;
 	nivel_ensino: string;
-	autor: {
+	modalidade: string;
+	autores: {
+		id: string;
 		nome: string;
 		email: string;
 		cpf: string;
-	};
+	}[];
 	area: string;
 };
 
