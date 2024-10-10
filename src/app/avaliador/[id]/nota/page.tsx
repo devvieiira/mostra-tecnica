@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { nota } from "@/request/avaliacao/vote";
+import { getTrabalhos } from "@/request/trabalho/find";
 import { AuthStore } from "@/store/authAvaliador";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -50,7 +51,32 @@ const schema = z.object({
 
 type formProps = z.infer<typeof schema>;
 
-export default function Nota({ params }: { params: { idTrabalho: string } }) {
+export async function getStaticPaths() {
+	const trabalhos = await getTrabalhos();
+
+	// Gera paths com os IDs
+	const paths = trabalhos.map((trabalho) => ({
+		params: { id: trabalho.id },
+	}));
+
+	return {
+		paths,
+		fallback: false, // Ou 'blocking' se quiser gerar sob demanda
+	};
+}
+
+export async function getStaticProps({ params }: { params: { id: string } }) {
+	const trabalhos = await getTrabalhos();
+	const trabalho = trabalhos.find((trabalho) => trabalho.id === params.id);
+
+	return {
+		props: {
+			trabalho,
+		},
+	};
+}
+
+export default function Nota({ params }: { params: { id: string } }) {
 	const [selectValue, setSelectValue] = useState("");
 	const router = useRouter();
 	const {
@@ -89,7 +115,7 @@ export default function Nota({ params }: { params: { idTrabalho: string } }) {
 			if (data.inclusao === "false") {
 				const { response } = await mutateAsync({
 					idAvaliador: user.id,
-					idTrabalho: params.idTrabalho,
+					idTrabalho: params.id,
 					nota1: Number(data.nota1),
 					nota3: Number(data.nota2),
 					nota4: Number(data.nota3),
@@ -105,7 +131,7 @@ export default function Nota({ params }: { params: { idTrabalho: string } }) {
 
 			const { response } = await mutateAsync({
 				idAvaliador: user.id,
-				idTrabalho: params.idTrabalho,
+				idTrabalho: params.id,
 				nota1: Number(data.nota1),
 				nota3: Number(data.nota2),
 				nota4: Number(data.nota3),
