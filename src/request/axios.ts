@@ -29,7 +29,7 @@ export const axiosConfig = {
 };
 
 export const api = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_URL || "192.168.103.124:4000",
+	baseURL: process.env.NEXT_PUBLIC_URL,
 	timeout: 1000,
 	withCredentials: true,
 	headers: {
