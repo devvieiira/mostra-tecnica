@@ -35,7 +35,7 @@ export const api = axios.create({
 	headers: {
 		Authorization: tokenAdmin
 			? `Bearer ${tokenAdmin}`
-			: null || tokenAvaliador
+			: tokenAvaliador
 				? `Bearer ${tokenAvaliador}`
 				: null,
 	},
