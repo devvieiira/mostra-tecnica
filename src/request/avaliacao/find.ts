@@ -4,11 +4,20 @@ type avalicoes = {
 	trabalhoId: string;
 	titulo_trabalho: string;
 	instituicao: string;
-	nota: number;
-	avaliador: string;
-	avaliadorEmail: string;
 	areaTrabalho: string;
-	autor: string;
+	autores: [
+		{
+			id: string;
+			nome: string;
+			role: string;
+			votou: boolean;
+		}
+	];
+	autoresIds: string[];
+	notas: number[];
+	notaTotal: number;
+	usuarioId: string;
+	inclusao: boolean
 };
 
 export async function getAvaliacoes(): Promise<avalicoes[]> {

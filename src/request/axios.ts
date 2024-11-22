@@ -20,7 +20,6 @@ const tokenAdmin = storageAdmin?.state?.state?.user?.token;
 
 const storegeAvaliador = JSON.parse(getFromLocalStorageAvaliador() as string);
 const tokenAvaliador = storegeAvaliador?.state?.state?.user?.token;
-console.log("token localStorage", tokenAdmin);
 
 export const axiosConfig = {
 	headers: {
@@ -31,11 +30,10 @@ export const axiosConfig = {
 export const api = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_URL,
 	timeout: 1000,
-	withCredentials: true,
 	headers: {
 		Authorization: tokenAdmin
 			? `Bearer ${tokenAdmin}`
-			: null || tokenAvaliador
+			:  tokenAvaliador
 				? `Bearer ${tokenAvaliador}`
 				: null,
 	},

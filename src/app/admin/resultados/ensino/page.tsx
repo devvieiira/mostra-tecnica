@@ -22,8 +22,9 @@ export default function Home() {
 	});
 
 
+
 	const filtered = avaliacoes?.filter(
-		(item) => item.areaTrabalho === "Ciências Humanas",
+		(item) => item.areaTrabalho === "",
 	);
 
 	return (

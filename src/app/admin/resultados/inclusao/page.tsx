@@ -23,14 +23,16 @@ export default function Home() {
 
 
 	const filtered = avaliacoes?.filter(
-		(item) => item.areaTrabalho === "Ciências Humanas",
+		(item) => 
+			item.inclusao
 	);
+
 
 	return (
 		<main className="bg-white flex flex-col items-center min-h-screen space-y-10">
 			<NavBar value="admin" />
 			<div className="flex items-center justify-center px-4 istok-web-regular pb-14 w-full">
-			{filtered && filtered.length > 0 ? (
+				{filtered && filtered.length > 0 ? (
 					<Card className="w-5/6 md:w-1/2 px-4 py-2 justify-center items-center space-y-5 bg-[#F9F9F9] mx-4 my-4">
 					<div className="w-full grid grid-cols-1 md:grid-cols-4 md:space-x-4">
 						<span className="font-semibold hidden md:inline md:col-span-2">Título:</span>

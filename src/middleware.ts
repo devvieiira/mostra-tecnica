@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Corrigindo o import
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -6,43 +6,46 @@ interface DecodedToken {
 	id: string;
 	email: string;
 	name: string;
-	cpf: string;
+	cpf?: string;
 	role: string;
 }
 
 export async function middleware(request: NextRequest) {
-	const token = request.cookies.get("token")?.value;
+	try {
+		const token = request.cookies.get("token")?.value;
 
-	if (!token) {
-		// Se não houver token, redireciona para a tela de login
+		if (!token) {
+			// Redireciona para login se não houver token
+			return NextResponse.redirect(new URL("/login/admin", request.url));
+		}
+
+		// Decodifica o token JWT
+		const decodedToken: DecodedToken = jwtDecode(token);
+		const url = new URL(request.url);
+
+		if (!decodedToken.cpf) {
+			// Usuário sem CPF
+			if (url.pathname.startsWith("/admin")) {
+				// Permitido acesso à rota de admin
+				return NextResponse.next();
+			} else {
+				// Redireciona para /admin se CPF não estiver presente
+				return NextResponse.redirect(new URL("/admin", request.url));
+			}
+		} else {
+			// Usuário com CPF
+			if (url.pathname.startsWith("/avaliador")) {
+				// Permitido acesso à rota de avaliador
+				return NextResponse.next();
+			} else {
+				// Redireciona para /avaliador se tentar acessar rota de admin
+				return NextResponse.redirect(new URL("/avaliador", request.url));
+			}
+		}
+	} catch (error) {
+		// Tratamento de erro no token
+		console.error("Erro ao decodificar token:", error);
 		return NextResponse.redirect(new URL("/login/admin", request.url));
-	}
-
-	// Decodifica o token JWT
-	const decodedToken: DecodedToken = jwtDecode(token);
-	const url = new URL(request.url);
-
-	if (!decodedToken.cpf) {
-		// Usuário sem CPF
-		if (url.pathname.startsWith("/admin")) {
-			// Usuário sem CPF acessando rota do admin -> permitido
-			return NextResponse.next();
-			// biome-ignore lint/style/noUselessElse: <explanation>
-		} else {
-			// Usuário sem CPF tentando acessar a rota de avaliador -> redireciona para admin
-			return NextResponse.redirect(new URL("/admin", request.url));
-		}
-		// biome-ignore lint/style/noUselessElse: <explanation>
-	} else {
-		// Usuário com CPF
-		if (url.pathname.startsWith("/avaliador")) {
-			// Usuário com CPF acessando rota de avaliador -> permitido
-			return NextResponse.next();
-			// biome-ignore lint/style/noUselessElse: <explanation>
-		} else {
-			// Usuário com CPF tentando acessar a rota de admin -> redireciona para avaliador
-			return NextResponse.redirect(new URL("/avaliador", request.url));
-		}
 	}
 }
 

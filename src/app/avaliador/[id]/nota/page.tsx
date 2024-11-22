@@ -46,6 +46,42 @@ const schema = z.object({
 		.string()
 		.min(1, "O campo deve ser maior que zero.")
 		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota6: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota7: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota8: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota9: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota10: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota11: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota12: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota13: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
+		nota14: z
+		.string()
+		.min(1, "O campo deve ser maior que zero.")
+		.max(10, "O campo deve ser menor ou igual a dez."),
 	inclusao: z.string(),
 });
 
@@ -83,7 +119,8 @@ export default function Nota({ params }: { params: { id: string } }) {
 	];
 
 	const handleForm = async (data: formProps) => {
-		console.log(data);
+
+		console.log(data)
 
 		// Exemplo de payload
 		const inviteForm = async () => {
@@ -92,10 +129,19 @@ export default function Nota({ params }: { params: { id: string } }) {
 					idAvaliador: user.id,
 					idTrabalho: params.id,
 					nota1: Number(data.nota1),
-					nota3: Number(data.nota2),
-					nota4: Number(data.nota3),
-					nota2: Number(data.nota4),
+					nota2: Number(data.nota2),
+					nota3: Number(data.nota3),
+					nota4: Number(data.nota4),
 					nota5: Number(data.nota5),
+					nota6: Number(data.nota6),
+					nota7: Number(data.nota7),
+					nota8: Number(data.nota8),
+					nota9: Number(data.nota9),
+					nota10: Number(data.nota10),
+					nota11: Number(data.nota11),
+					nota12: Number(data.nota12),
+					nota13: Number(data.nota13),
+					nota14: Number(data.nota14),
 					inclusao: "",
 				});
 
@@ -108,10 +154,19 @@ export default function Nota({ params }: { params: { id: string } }) {
 				idAvaliador: user.id,
 				idTrabalho: params.id,
 				nota1: Number(data.nota1),
-				nota3: Number(data.nota2),
-				nota4: Number(data.nota3),
-				nota2: Number(data.nota4),
-				nota5: Number(data.nota5),
+					nota2: Number(data.nota2),
+					nota3: Number(data.nota3),
+					nota4: Number(data.nota4),
+					nota5: Number(data.nota5),
+					nota6: Number(data.nota6),
+					nota7: Number(data.nota7),
+					nota8: Number(data.nota8),
+					nota9: Number(data.nota9),
+					nota10: Number(data.nota10),
+					nota11: Number(data.nota11),
+					nota12: Number(data.nota12),
+					nota13: Number(data.nota13),
+					nota14: Number(data.nota14),
 				inclusao: data.inclusao,
 			});
 			if (response) {
@@ -130,14 +185,19 @@ export default function Nota({ params }: { params: { id: string } }) {
 	};
 
 	return (
-		<main className="bg-white flex flex-col items-center min-h-screen space-y-4">
+		<main className="bg-white flex flex-col items-center min-h-screen space-y-4 mb-10">
 			<NavBar value="noHamburguer" />
-			<Card className="w-[560px] flex flex-col px-4 py-6 space-y-6 istok-web-regular">
+			<Card className="w-[360px] md:w-[560px] flex flex-col px-4 py-6 space-y-6 istok-web-regular">
 				<div>
 					<h1 className="font-semibold text-xl">Avalie o trabalho</h1>
 				</div>
+				
 				<Separator orientation="horizontal" className="w-full" />
 				<form className="space-y-8 w-full" onSubmit={handleSubmit(handleForm)}>
+				<div className="space-y-4 flex justify-center items-center">
+					<h1 className="font-semibold text-black text-xl">Resumo:</h1>
+				</div>
+				<Separator className="w-full" orientation="horizontal" />
 					<div className="space-y-4">
 						<span>A linguagem é adequada e clara?</span>
 						<RadioGroup
@@ -266,8 +326,245 @@ export default function Nota({ params }: { params: { id: string } }) {
 							<p className="text-red-500 text-sm">{errors.nota5.message}</p>
 						)}
 					</div>
+					
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4 flex justify-center items-center">
+					<h1 className="font-semibold text-black text-xl">Apresentação:</h1>
+				</div>
+
+				<Separator orientation="horizontal" />
+
+				<div className="space-y-4">
+						<span>Todos os elementos textuais estão presentes?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota6", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota6")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota6 && (
+							<p className="text-red-500 text-sm">{errors.nota6.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
 
 					<div className="space-y-4">
+						<span>A introdução apresenta de forma clara o assunto e aborda o problema a ser solucionado?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota7", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota7")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota7 && (
+							<p className="text-red-500 text-sm">{errors.nota7.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4">
+						<span>O(s) objetivo(s) está(ão) claro(s) e contempla(m) a(s) finalidade(s) e o(s) propósito(s) do
+						trabalho?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota8", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota8")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota8 && (
+							<p className="text-red-500 text-sm">{errors.nota8.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4">
+						<span>A metodologia empregada está adequada ao objetivo proposto?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota9", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota9")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota9 && (
+							<p className="text-red-500 text-sm">{errors.nota9.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4">
+						<span>Os resultados estão coerentes com o objetivo proposto?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota10", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota10")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota10 && (
+							<p className="text-red-500 text-sm">{errors.nota10.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4">
+						<span>O trabalho apresenta elementos/recursos (imagens, tabelas, gráficos, etc) importantes
+						deste?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota11", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota11")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota11 && (
+							<p className="text-red-500 text-sm">{errors.nota11.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4">
+						<span>Demonstra a relevância social, ambiental, cultural, tecnológica ou científica do trabalho?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota12", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota12")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota12 && (
+							<p className="text-red-500 text-sm">{errors.nota12.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4">
+						<span>O(a) apresentador(a) demonstrou domínio do conteúdo, da capacidade de síntese, correção
+						e adequação de linguagem?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota13", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota13")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota13 && (
+							<p className="text-red-500 text-sm">{errors.nota13.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4">
+						<span>O(a) apresentador(a) demonstrou postura e capacidade de argumentação na arguição?</span>
+						<RadioGroup
+							onValueChange={(value) => setValue("nota14", value)}
+							className="space-x-2 flex items-center justify-center"
+						>
+							{numbers.map((item) => (
+								<div className="flex items-center space-x-2" key={item.value}>
+									<RadioGroupItem
+										value={item.value}
+										id={item.value}
+										{...register("nota14")}
+									/>
+									<Label htmlFor={item.value}>{item.value}</Label>
+								</div>
+							))}
+						</RadioGroup>
+
+						{errors.nota14 && (
+							<p className="text-red-500 text-sm">{errors.nota14.message}</p>
+						)}
+					</div>
+
+					<Separator orientation="horizontal" />
+
+					<div className="space-y-4">	
+						<span>O trabalho é de inclusão?</span>
 						<Select
 							onValueChange={(value) => {
 								setValue("inclusao", value);
@@ -277,16 +574,16 @@ export default function Nota({ params }: { params: { id: string } }) {
 							{...register("inclusao")}
 						>
 							<SelectTrigger className="" id="select1">
-								<SelectValue className="" placeholder="Selecione uma área..." />
+								<SelectValue className="" placeholder="O trabalho é de inclusão?" />
 							</SelectTrigger>
 							<SelectContent className="">
 								<SelectGroup className="">
-									<SelectLabel className="2xl:text-xl">Trabalhos</SelectLabel>
+									<SelectLabel className="2xl:text-xl">Inclusão</SelectLabel>
 									<SelectItem className="" value="true">
 										Sim
 									</SelectItem>
 									<SelectItem className="" value="false">
-										nao
+										Não
 									</SelectItem>
 								</SelectGroup>
 							</SelectContent>

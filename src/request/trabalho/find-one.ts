@@ -11,12 +11,12 @@ type trabalhoProps = {
 		nome: string;
 		email: string;
 		cpf: string;
+		role: string;
 	}[];
 	area: string;
 };
 
 export async function getOneWork(id: string): Promise<trabalhoProps[]> {
 	const data = (await api.get(`/trabalhos/${id}`)).data.data;
-	// console.log(data);
 	return data;
 }

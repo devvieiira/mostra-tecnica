@@ -44,6 +44,15 @@ export default function Home() {
 						Visualizar Resultados
 					</span>
 				</Card>
+				<Card
+					className="w-[320px] h-[240px] flex flex-col justify-center items-center space-y-1 bg-[#F3F5F7] mx-4 my-4"
+					onClick={() => router.push("/admin/resultados/inclusao")}
+				>
+					<h1 className="text-2xl font-semibold">Inclusão</h1>
+					<span className="text-primary font-semibold hover:border-b hover:border-b-primary cursor-pointer">
+						Visualizar Resultados
+					</span>
+				</Card>
 			</div>
 		</main>
 	);
