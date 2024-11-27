@@ -3,6 +3,7 @@ import { api, axiosConfig } from "../axios";
 type atribuidos = {
   trabalhoId: string;
   titulo_trabalho: string;
+  carimbo: string;
   instituicao: string;
   areaTrabalho: string;
   autores: [

@@ -125,8 +125,6 @@ export default function Nota({ params }: { params: { id: string } }) {
 
 	const handleForm = async (data: formProps) => {
 
-		console.log(data)
-
 		// Exemplo de payload
 		const inviteForm = async () => {
 			// if (data.inclusao === "false") {

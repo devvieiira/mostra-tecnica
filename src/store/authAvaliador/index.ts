@@ -30,10 +30,8 @@ export const AuthStore = create<StoreProps>()(
 						cpf: user.cpf,
 					};
 
-					console.log(userData);
 					const formdata = new FormData();
 					formdata.append("cpf", userData.cpf);
-					console.log(formdata.values);
 
 					const r = await api.post(
 						"/auth/avaliador/signIn",

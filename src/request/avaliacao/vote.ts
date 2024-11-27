@@ -57,8 +57,6 @@ export async function nota({
 	formdata.append("nota14", nota14.toString());
 	if (inclusao) formdata.append("inclusao", inclusao);
 
-	console.log(formdata)
-
 	const response = await api.post(
 		`/avaliacao/${idAvaliador}/${idTrabalho}`,
 		formdata,

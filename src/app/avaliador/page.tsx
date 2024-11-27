@@ -22,11 +22,13 @@ export default function Home() {
 		queryFn: () => getAtribuidos(user.id),
 		enabled: !!user.id
 	});
+	
 
 	const {data: avaliador} = useQuery({
 		queryKey: ["avaliador", user.id],
 		queryFn: () => getOneAvaliable(user.id),
 	})
+
 
 
 	// Filtrar apenas os trabalhos com `avaliado: false`
@@ -86,6 +88,12 @@ export default function Home() {
 								<p className="text-muted-foreground text-sm">
 									<span className="font-semibold text-black">Área: </span>
 									{item.areaTrabalho}
+								</p>
+							</div>
+							<div className="flex space-x-1 items-center">
+								<p className="text-muted-foreground text-sm">
+									<span className="font-semibold text-black">Carimbo: </span>
+									{item.carimbo}
 								</p>
 							</div>
 							<div className="flex space-x-1 justify-center items-center py-2">
