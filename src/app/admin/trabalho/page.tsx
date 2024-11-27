@@ -177,19 +177,19 @@ export default function Trabalho() {
 												<div className="flex space-x-1 items-center">
 													<span className="font-semibold">Autor:</span>
 													<p className="text-muted-foreground text-sm">
-														{item.autores[0].nome}
+														{item.autores.map((item) => item.role === "NORMAL" && item.nome)}
 													</p>
 												</div>
 												<div className="flex space-x-1 items-center">
 													<span className="font-semibold">CPF do autor:</span>
 													<p className="text-muted-foreground text-sm">
-														{item.autores[0].cpf}
+														{item.autores.map((item) => item.role === "NORMAL" && item.cpf)}
 													</p>
 												</div>
 												<div className="flex space-x-1 items-center">
 													<span className="font-semibold">Email do autor:</span>
 													<p className="text-muted-foreground text-sm">
-														{item.autores[0].email}
+														{item.autores.map((item) => item.role === "NORMAL" && item.email)}
 													</p>
 												</div>
 												{item.area !== "" && (
@@ -237,7 +237,7 @@ export default function Trabalho() {
 														<div className="flex space-x-1 items-center">
 															<span className="font-semibold">Autor:</span>
 															<p className="text-muted-foreground text-sm">
-																{item.autores[0].nome}
+																{item.autores.map((item) => item.role === "NORMAL" && item.nome)}
 															</p>
 														</div>
 														<div className="flex space-x-1 items-center">
@@ -245,7 +245,7 @@ export default function Trabalho() {
 																CPF do autor:
 															</span>
 															<p className="text-muted-foreground text-sm">
-																{item.autores[0].cpf}
+																{item.autores.map((item) => item.role === "NORMAL" && item.cpf)}
 															</p>
 														</div>
 														<div className="flex space-x-1 items-center">
@@ -253,7 +253,7 @@ export default function Trabalho() {
 																Email do autor:
 															</span>
 															<p className="text-muted-foreground text-sm">
-																{item.autores[0].email}
+																{item.autores.map((item) => item.role === "NORMAL" && item.email)}
 															</p>
 														</div>
 														{item.area !== "" && (

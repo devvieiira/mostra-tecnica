@@ -10,7 +10,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
@@ -28,14 +27,12 @@ import { getTrabalhos } from "@/request/trabalho/find";
 import { getOneWork } from "@/request/trabalho/find-one";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link, NotepadText, Plus, Trash, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
+import { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Info({ params }: { params: { id: string } }) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	console.log(params.id);
 
 	const { data: avaliador } = useQuery({
 		queryKey: ["get-one-avaliable", params.id],
@@ -46,6 +43,7 @@ export default function Info({ params }: { params: { id: string } }) {
 		queryKey: ["get-trabalho", params.id],
 		queryFn: () => getOneWork(params.id),
 	});
+
 
 	const { data: trabalhos } = useQuery({
 		queryKey: ["get-trabalho"],
@@ -70,12 +68,13 @@ export default function Info({ params }: { params: { id: string } }) {
 	const [modalidade, setModalide] = useState("");
 
 	const filtered = trabalhos?.filter((item) =>
-		item.autores.map((i) => i.id !== params.id),
+		!item.autores.some((autor) => autor.id === params.id)
 	);
 
 	const onlyModalidade = filtered?.filter(
 		(item) => item.modalidade === modalidade,
 	);
+
 
 	const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -152,12 +151,13 @@ export default function Info({ params }: { params: { id: string } }) {
 							<div className="flex space-x-1">
 								<p>
 									<span className="font-semibold">Disponibilidade:</span>{" "}
-									{avaliador?.disponibilidade}
+									{avaliador?.disponilidade}
 								</p>
 							</div>
 						</div>
 					</div>
 				</Card>
+				<Suspense>
 				{trabalho?.map((item, index) => (
 					<Card className="w-4/5 md:w-2/5 space-y-4" key={item.id}>
 						<div className="flex relative justify-center py-6">
@@ -184,7 +184,7 @@ export default function Info({ params }: { params: { id: string } }) {
 								<div className="flex space-x-1">
 									<p>
 										<span className="font-medium">Autor:</span>{" "}
-										{item.autores[0].nome}
+										{item.autores.map((autor) => autor.role !== "AVALIADOR" && autor.nome)}
 									</p>
 								</div>
 								<div className="flex space-x-1">
@@ -216,6 +216,7 @@ export default function Info({ params }: { params: { id: string } }) {
 						</div>
 					</Card>
 				))}
+				</Suspense>
 				<Button onClick={toggleOpen}>
 					<Plus />
 				</Button>
@@ -253,6 +254,7 @@ export default function Info({ params }: { params: { id: string } }) {
 						<Separator orientation="horizontal" className="w-full" />
 
 						<form className="space-y-6 flex flex-col">
+							<Suspense>
 							{modalidade !== "" && (
 								<div className="space-y-16 2xl:space-y-2">
 									<div>
@@ -277,7 +279,7 @@ export default function Info({ params }: { params: { id: string } }) {
 													</h3>
 													<h3>
 														<span className="font-semibold">Autor:</span>{" "}
-														{item.autores[0].nome}
+														{item.autores.map((item) => item.role === "NORMAL" && item.nome)}
 													</h3>
 													{item.area && (
 														<h3>
@@ -294,6 +296,7 @@ export default function Info({ params }: { params: { id: string } }) {
 									</div>
 								</div>
 							)}
+							</Suspense>
 						</form>
 					</div>
 				</DialogContent>

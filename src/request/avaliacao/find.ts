@@ -4,14 +4,26 @@ type avalicoes = {
 	trabalhoId: string;
 	titulo_trabalho: string;
 	instituicao: string;
-	nota: number;
-	avaliador: string;
-	avaliadorEmail: string;
 	areaTrabalho: string;
-	autor: string;
+	nivelEnsino: string;
+	carimbo: string;
+	autores: [
+		{
+			id: string;
+			nome: string;
+			role: string;
+			votou: boolean;
+		}
+	];
+	autoresIds: string[];
+	notas: number[];
+	notaTotal: number;
+	usuarioId: string;
+	inclusao: boolean
 };
 
-export async function getAvaliacoes(): Promise<avalicoes[]> {
+export async function 	getAvaliacoes(): Promise<avalicoes[]> {
 	const data = (await api.get("/trabalhos-votados")).data.data;
+	console.log(data)
 	return data;
 }

@@ -16,7 +16,7 @@ type trabalhoProps = {
 	area: string;
 };
 
-export async function getOneWork(id: string): Promise<trabalhoProps[]> {
-	const data = (await api.get(`/trabalhos/${id}`)).data.data;
+export async function getUniqueWork(id: string): Promise<trabalhoProps> {
+	const data = (await api.get(`/trabalho/unique/${id}`)).data.data;
 	return data;
 }

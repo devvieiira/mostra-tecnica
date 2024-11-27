@@ -5,5 +5,5 @@ import { useRouter } from "next/navigation";
 export default function Home() {
 	const router = useRouter();
 
-	return router.push("/avaliador");
+	return router.push("/login/admin");
 }

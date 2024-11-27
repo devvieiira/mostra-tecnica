@@ -10,8 +10,9 @@ export async function GET(req: Request) {
 	cookieStore.set("token", accessToken, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
-		maxAge: 60 * 60 * 12, // (segundos) * (minutos) * (horas) * (dias)
+		maxAge: 60 * 60 * 24 * 7,
 	});
 
-	return NextResponse.redirect(new URL("/admin", req.url));
+	// return NextResponse.redirect(new URL("https://backendmostratecnica.online/admin", req.url));
+	return NextResponse.redirect(new URL("http://localhost:3000/admin", req.url));
 }

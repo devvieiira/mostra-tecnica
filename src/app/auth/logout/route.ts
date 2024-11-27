@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+
 export async function GET(res: Request) {
 	const cookieStore = cookies();
-
 	cookieStore.delete("token");
 
-	return NextResponse.redirect(new URL("/login/admin", res.url));
+	// Redireciona para a URL completa do backend
+	// return NextResponse.redirect("https://backendmostratecnica.online/login/admin");
+	return NextResponse.redirect("http://localhost:3000/login/admin");
 }

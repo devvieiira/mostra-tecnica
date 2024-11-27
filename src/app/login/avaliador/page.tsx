@@ -38,7 +38,6 @@ export default function Login() {
 	const router = useRouter();
 
 	const handleForm = async (data: formProps) => {
-		console.log(data);
 		const executeLogin = async () => {
 			const cookie = await login({
 				cpf: data.cpf,
@@ -58,7 +57,6 @@ export default function Login() {
 				return "Login efetuado";
 			},
 			error: (error) => {
-				console.log(error.message);
 				return "Email e/ou senha incorretos";
 			},
 
@@ -67,7 +65,6 @@ export default function Login() {
 			},
 		});
 
-		// console.log(data)
 	};
 
 	useEffect(() => {

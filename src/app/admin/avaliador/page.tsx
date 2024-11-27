@@ -145,8 +145,8 @@ export default function Avaliador() {
 			error: "Algo deu errado!",
 		});
 	};
+	
 
-	console.log(avaliadores);
 	return (
 		<>
 			<main className="bg-white flex flex-col items-center min-h-screen">
@@ -182,7 +182,7 @@ export default function Avaliador() {
 												key={item.id}
 											>
 												<div className="flex space-x-1 px-2 justify-end items-center">
-													<Link href={`/avaliador/${item.id}/info`}>
+													<Link href={`/admin/avaliador/${item.id}/info`}>
 														<Plus />
 													</Link>
 												</div>
