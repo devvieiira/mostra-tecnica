@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Esse é um projeto de estágio realizado com um total de 360 horas, efetuado no IFRS Campus Feliz.
 
-## Getting Started
 
-First, run the development server:
+O frontend foi desenvolvido em [NextJS](https://tailwindcss.com/) com auxilio das seguintes tecnologias.
 
-```bash
+- [TailwindCSS](https://nextjs.org/)
+- [ShadcnUI](https://ui.shadcn.com/)
+
+## Como funciona?
+
+Para iniciar esse projeto, siga os seguintes passos.
+
+```U
+#Utilizar os comandos dentro da pasta raíz, exemplos: mostra-tecnica/frontend
+npm install
+
+# Se deseja executar a aplicação de maneira local, afins de teste.
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Caso deseja fazer o upload em uma VPS, utilize:
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Quando a aplicação está ligada de modo local, ele funciona no caminho: [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Para o projeto funcionar, é necessário que o backend da aplicação esteja ligado, você pode encontrar mais sobre o repositório no no meu [GitHub](https://github.com/devvieiira/mostra-tecnica-backend).
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## Como interligar o frontend com o backend?
 
-To learn more about Next.js, take a look at the following resources:
+Se você já possui o backend em sua máquina, basta interligado pelo arquivo _.env_ , colocando o caminho ou a url do seu backend.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Exemplo:
+```
+# Arquivo .env
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+NEXT_PUBLIC_URL="Sua URL vai aqui"
+```
 
-## Deploy on Vercel
+Lembre-se, que o backend também precisa conter a _URL_ do frontend para o funcionamento do sistema.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
