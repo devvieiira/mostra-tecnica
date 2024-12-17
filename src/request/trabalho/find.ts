@@ -3,6 +3,8 @@ import { api, axiosConfig } from "../axios";
 type trabalhoProps = {
   id: string;
   instituicao: string;
+  orientador: string;
+  coorientador: string;
   titulo_trabalho: string;
   nivel_ensino: string;
   modalidade: string;

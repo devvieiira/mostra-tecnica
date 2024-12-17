@@ -6,6 +6,7 @@ type avalicoes = {
 	instituicao: string;
 	areaTrabalho: string;
 	nivelEnsino: string;
+	modalidade: string;
 	carimbo: string;
 	autores: [
 		{

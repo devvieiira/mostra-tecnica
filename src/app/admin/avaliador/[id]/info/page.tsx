@@ -247,6 +247,7 @@ export default function Info({ params }: { params: { id: string } }) {
 										<SelectItem value="Ensino">Ensino</SelectItem>
 										<SelectItem value="Pesquisa">Pesquisa</SelectItem>
 										<SelectItem value="Extensão">Extensão</SelectItem>
+										<SelectItem value="Indissociável">Indissociável</SelectItem>
 									</SelectGroup>
 								</SelectContent>
 							</Select>
@@ -277,10 +278,22 @@ export default function Info({ params }: { params: { id: string } }) {
 														<span className="font-semibold">Título:</span>{" "}
 														{item.titulo_trabalho}
 													</h3>
+													
 													<h3>
 														<span className="font-semibold">Autor:</span>{" "}
 														{item.autores.map((item) => item.role === "NORMAL" && item.nome)}
 													</h3>
+
+													<h3>
+														<span className="font-semibold">Orientador:</span>{" "}
+														{item.orientador}
+													</h3>
+													{item.coorientador !== "" && (
+														<h3>
+															<span className="font-semibold">Coorientador:</span>{" "}
+															{item.coorientador}
+														</h3>
+													)}
 													{item.area && (
 														<h3>
 															<span className="font-semibold">Área:</span>{" "}

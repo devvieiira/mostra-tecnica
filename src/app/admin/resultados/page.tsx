@@ -48,6 +48,15 @@ export default function Home() {
 					className="w-[320px] h-[240px] flex flex-col justify-center items-center space-y-1 bg-[#F3F5F7] mx-4 my-4"
 					
 				>
+					<h1 className="text-2xl font-semibold">Indissociável</h1>
+					<span onClick={() => router.push("/admin/resultados/indissociavel")} className="text-primary font-semibold hover:border-b hover:border-b-primary cursor-pointer">
+						Visualizar Resultados
+					</span>
+				</Card>
+				<Card
+					className="w-[320px] h-[240px] flex flex-col justify-center items-center space-y-1 bg-[#F3F5F7] mx-4 my-4"
+					
+				>
 					<h1 className="text-2xl font-semibold">Resultados Gerais</h1>
 					<span onClick={() => router.push("/admin/resultados/geral")} className="text-primary font-semibold hover:border-b hover:border-b-primary cursor-pointer">
 						Visualizar Resultados

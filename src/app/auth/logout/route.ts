@@ -6,6 +6,6 @@ export async function GET(res: Request) {
 	cookieStore.delete("token");
 
 	// Redireciona para a URL completa do backend
-	// return NextResponse.redirect("https://backendmostratecnica.online/login/admin");
-	return NextResponse.redirect("http://localhost:3000/login/admin");
+	return NextResponse.redirect("https://backendmostratecnica.online/login/admin");
+	// return NextResponse.redirect("http://localhost:3000/login/admin");
 }

@@ -13,6 +13,6 @@ export async function GET(req: Request) {
 		maxAge: 60 * 60 * 24 * 7,
 	});
 
-	// return NextResponse.redirect(new URL("https://backendmostratecnica.online/admin", req.url));
-	return NextResponse.redirect(new URL("http://localhost:3000/admin", req.url));
+	return NextResponse.redirect(new URL("https://backendmostratecnica.online/admin", req.url));
+	// return NextResponse.redirect(new URL("http://localhost:3000/admin", req.url));
 }
