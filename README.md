@@ -1,9 +1,9 @@
 Esse é um projeto de estágio realizado com um total de 360 horas, efetuado no IFRS Campus Feliz.
 
 
-O frontend foi desenvolvido em [NextJS](https://tailwindcss.com/) com auxilio das seguintes tecnologias.
+O frontend foi desenvolvido em [NextJS](https://nodejs.org/en/) com auxilio das seguintes tecnologias.
 
-- [TailwindCSS](https://nextjs.org/)
+- [TailwindCSS](https://tailwindcss.com/)
 - [ShadcnUI](https://ui.shadcn.com/)
 
 ## Como funciona?
